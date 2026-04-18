@@ -46,7 +46,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>850</y>
+      <y>890</y>
       <width>401</width>
       <height>41</height>
      </rect>
@@ -59,7 +59,7 @@ background-color: rgb(85, 255, 255);</string>
      <string>SOLVE</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="load_results">
+   <widget class="QPushButton" name="loadResultsButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -82,7 +82,7 @@ font: 700 12pt &quot;Arial&quot;;</string>
       <x>20</x>
       <y>400</y>
       <width>401</width>
-      <height>221</height>
+      <height>251</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -99,6 +99,9 @@ font: 700 12pt &quot;Arial&quot;;</string>
        <width>91</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>Length of glass (x-dim)</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
@@ -168,6 +171,9 @@ font: 12pt &quot;Arial&quot;;</string>
        <height>21</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>Height of glass (y-dim)</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
 font: 12pt &quot;Arial&quot;;</string>
@@ -196,38 +202,53 @@ font: 12pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>140</y>
-       <width>61</width>
+       <y>163</y>
+       <width>91</width>
        <height>18</height>
       </rect>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 127);
-font: 12pt &quot;Arial&quot;;</string>
-     </property>
-    </widget>
-    <widget class="QSpinBox" name="ex">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>108</y>
-       <width>61</width>
-       <height>21</height>
-      </rect>
+     <property name="toolTip">
+      <string>Number of elements along Ly</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
 font: 12pt &quot;Arial&quot;;</string>
      </property>
      <property name="maximum">
-      <number>1</number>
+      <number>100</number>
+     </property>
+     <property name="displayIntegerBase">
+      <number>10</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="ex">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>131</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Number of elements along Lx</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 127);
+font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
      </property>
     </widget>
     <widget class="QLabel" name="label_ey">
      <property name="geometry">
       <rect>
        <x>29</x>
-       <y>137</y>
+       <y>160</y>
        <width>23</width>
        <height>25</height>
       </rect>
@@ -243,7 +264,7 @@ font: 12pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>29</x>
-       <y>105</y>
+       <y>128</y>
        <width>22</width>
        <height>25</height>
       </rect>
@@ -259,7 +280,7 @@ font: 12pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>170</y>
+       <y>193</y>
        <width>341</width>
        <height>37</height>
       </rect>
@@ -272,12 +293,64 @@ background-color: rgb(85, 255, 255);</string>
       <string>MESH</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_Ly_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>100</y>
+       <width>16</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;t&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="thick_glass">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>100</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Thickness of glass (z-dim)</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 127);
+font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="maximum">
+      <double>999.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_load_10">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>100</y>
+       <width>31</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: italic 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;mm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>630</y>
+      <y>670</y>
       <width>401</width>
       <height>111</height>
      </rect>
@@ -297,12 +370,18 @@ background-color: rgb(85, 255, 255);</string>
        <height>21</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>Young's Modulus of glass</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
 font: 12pt &quot;Arial&quot;;</string>
      </property>
      <property name="maximum">
       <double>98.989999999999995</double>
+     </property>
+     <property name="value">
+      <double>72.000000000000000</double>
      </property>
     </widget>
     <widget class="QLabel" name="YoungModulus">
@@ -348,13 +427,31 @@ font: 12pt &quot;Arial&quot;;</string>
       <rect>
        <x>50</x>
        <y>70</y>
-       <width>71</width>
+       <width>101</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>Poisson's ratio of glass</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
 font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="prefix">
+      <string/>
+     </property>
+     <property name="decimals">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <double>0.500000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.230000000000000</double>
      </property>
     </widget>
     <widget class="QLabel" name="label_load_6">
@@ -378,7 +475,7 @@ font: 12pt &quot;Arial&quot;;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>760</y>
+      <y>800</y>
       <width>401</width>
       <height>80</height>
      </rect>
@@ -414,6 +511,9 @@ font: 12pt &quot;Arial&quot;;</string>
        <height>21</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>Uniform pressure applied to glass top</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 127);
 font: 12pt &quot;Arial&quot;;</string>
@@ -432,7 +532,7 @@ font: 12pt &quot;Arial&quot;;</string>
       <string notr="true">font: italic 12pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;MPa&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;kPa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </widget>
@@ -440,9 +540,9 @@ font: 12pt &quot;Arial&quot;;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>990</y>
+      <y>1010</y>
       <width>401</width>
-      <height>151</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -456,7 +556,7 @@ font: 12pt &quot;Arial&quot;;</string>
       <rect>
        <x>330</x>
        <y>40</y>
-       <width>16</width>
+       <width>31</width>
        <height>20</height>
       </rect>
      </property>
@@ -464,7 +564,7 @@ font: 12pt &quot;Arial&quot;;</string>
       <string notr="true">font: italic 12pt &quot;Arial&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;m&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;mm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_max_p_stress">
@@ -509,7 +609,11 @@ font: 12pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(170, 255, 0);</string>
+      <string notr="true">background-color: rgb(170, 255, 0);
+font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLineEdit" name="u_max">
@@ -524,6 +628,9 @@ font: 12pt &quot;Arial&quot;;</string>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(170, 255, 0);
 font: 12pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLabel" name="label_max_u">
@@ -563,7 +670,7 @@ font: 12pt &quot;Arial&quot;;</string>
     <property name="geometry">
      <rect>
       <x>22</x>
-      <y>950</y>
+      <y>970</y>
       <width>95</width>
       <height>25</height>
      </rect>
@@ -580,6 +687,7 @@ font: 12pt &quot;Arial&quot;;</string>
  <tabstops>
   <tabstop>Lx</tabstop>
   <tabstop>Ly</tabstop>
+  <tabstop>thick_glass</tabstop>
   <tabstop>ex</tabstop>
   <tabstop>ey</tabstop>
   <tabstop>meshButton</tabstop>
@@ -587,11 +695,9 @@ font: 12pt &quot;Arial&quot;;</string>
   <tabstop>nu</tabstop>
   <tabstop>appliedLoad</tabstop>
   <tabstop>solveButton</tabstop>
-  <tabstop>load_results</tabstop>
+  <tabstop>loadResultsButton</tabstop>
   <tabstop>u_max</tabstop>
   <tabstop>sigma_1</tabstop>
-  <tabstop>Lx_2</tabstop>
-  <tabstop>Ly_2</tabstop>
  </tabstops>
  <resources/>
  <connections/>

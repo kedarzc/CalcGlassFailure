@@ -26,25 +26,28 @@ class App:
         # -------------------------
         # Adjust Max and Min numbers
         # --------------------------
-        self.window.EMod.setRange(1e-6, 1e12)
+        self.window.EMod.setRange(1e-3, 1e6)
         self.window.EMod.setDecimals(2)
-        self.window.EMod.setSingleStep(1e6)
+        self.window.EMod.setSingleStep(1)
 
         # Poisson’s ratio
         self.window.nu.setRange(0.0, 0.499)
         self.window.nu.setSingleStep(0.01)
-        self.window.nu.setValue(0.3)
-
+        
         # Geometry
         self.window.Lx.setRange(1e-3, 1e6)
         self.window.Ly.setRange(1e-3, 1e6)
+        self.window.thick_glass.setRange(1e-3, 1e6)
+        self.window.thick_glass.setSingleStep(0.01)
 
         # Mesh
-        self.window.ex.setRange(1, 1000)
-        self.window.ey.setRange(1, 1000)
+        self.window.ex.setRange(1e-3, 1000)
+        self.window.ey.setRange(1e-3, 1000)
 
         # Load
         self.window.appliedLoad.setRange(1e-3, 1e6)
+
+        # Make results un-editable
 
         # -------------------------
         # Attach PyVista
@@ -58,7 +61,6 @@ class App:
         layout.addWidget(self.plotter.interactor)
 
         self.plotter.set_background("white")
-
         self.plotter.set_background("white")
 
         self.plotter.add_axes(
@@ -76,13 +78,14 @@ class App:
         # -------------------------
         # Connect buttons
         # -------------------------
-        self.window.meshButton.clicked.connect(self.update_grid)
-        self.window.solveButton.clicked.connect(self.export_mesh)
+        self.window.meshButton.clicked.connect(self.create_mesh)
+        self.window.solveButton.clicked.connect(self.solve_fea)
+        self.window.loadResultsButton.clicked.connect(self.read_results)
 
         # -------------------------
         # Initial render (IMPORTANT)
         # -------------------------
-        self.update_grid()
+        self.create_mesh()
 
     # -------------------------
     # Grid creation
@@ -102,7 +105,7 @@ class App:
     # -------------------------
     # Update grid
     # -------------------------
-    def update_grid(self):
+    def create_mesh(self):
         Lx = self.window.Lx.value()
         Ly = self.window.Ly.value()
         ex = self.window.ex.value()
@@ -131,7 +134,7 @@ class App:
     # -------------------------
     # Export Abaqus
     # -------------------------
-    def export_mesh(self):
+    def solve_fea(self):
         if self.grid is None:
             return
 
@@ -166,6 +169,13 @@ class App:
 
         print(f"Abaqus input file written: {filename}")
 
+    # -------------------------
+    # Read results
+    # -------------------------
+    def read_results(self):
+        self.window.u_max.setText("N/A")
+        self.window.sigma_1.setText("N/A")
+        
 
 # -------------------------
 # Run
