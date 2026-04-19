@@ -10,16 +10,17 @@ from PySide6.QtWidgets import QApplication, QVBoxLayout
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
-
-
+import fea_utils as FEAUTILS
+import fea_data as FEADATA
+import post_utils as POSTUTILS
 
 class App:
     def __init__(self):
+
         loader = QUiLoader()
 
         ui_file = QFile("main_window.ui")
         ui_file.open(QFile.ReadOnly)
-
         self.window = loader.load(ui_file)
         ui_file.close()
 
@@ -46,8 +47,6 @@ class App:
 
         # Load
         self.window.appliedLoad.setRange(1e-3, 1e6)
-
-        # Make results un-editable
 
         # -------------------------
         # Attach PyVista
@@ -106,12 +105,11 @@ class App:
     # Update grid
     # -------------------------
     def create_mesh(self):
+
         Lx = self.window.Lx.value()
         Ly = self.window.Ly.value()
         ex = self.window.ex.value()
         ey = self.window.ey.value()
-
-        EMod = self.window.EMod.value()
 
         self.grid = self.create_structured_grid(Lx, Ly, ex, ey)
 
@@ -131,48 +129,30 @@ class App:
         self.plotter.reset_camera()
         self.plotter.render()
 
-    # -------------------------
-    # Export Abaqus
-    # -------------------------
+    # -----------------------------
+    # Solve the FEA Problem
+    # ------------------------------
     def solve_fea(self):
+
         if self.grid is None:
             return
 
-        grid = self.grid
-        nx, ny, _ = grid.dimensions
-        points = grid.points
+        model = FEADATA.build_model_from_ui(self.window)
 
-        filename = "mesh.inp"
-
-        with open(filename, 'w') as f:
-            f.write("*HEADING\n")
-            f.write("** Generated from PyVista structured grid\n")
-
-            # Nodes
-            f.write("*NODE\n")
-            for nid, (x, y, z) in enumerate(points, start=1):
-                f.write(f"{nid}, {x:.6f}, {y:.6f}, {z:.6f}\n")
-
-            # Elements
-            f.write("*ELEMENT, TYPE=S4\n")
-
-            eid = 1
-            for j in range(ny - 1):
-                for i in range(nx - 1):
-                    n1 = i + j * nx + 1
-                    n2 = (i + 1) + j * nx + 1
-                    n3 = (i + 1) + (j + 1) * nx + 1
-                    n4 = i + (j + 1) * nx + 1
-
-                    f.write(f"{eid}, {n1}, {n2}, {n3}, {n4}\n")
-                    eid += 1
-
-        print(f"Abaqus input file written: {filename}")
+        # Write the input deck
+        FEAUTILS.write_abaqus_inp(self.grid, model, "mesh.inp")
+        FEAUTILS.run_ccx_dynamic()
 
     # -------------------------
     # Read results
     # -------------------------
     def read_results(self):
+
+        disp, sigma1 = POSTUTILS.extract_max_results_from_dat("mesh.dat")
+
+        print("Max displacement:", disp)
+        print("Max principal stress:", sigma1)
+
         self.window.u_max.setText("N/A")
         self.window.sigma_1.setText("N/A")
         
