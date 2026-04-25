@@ -99,18 +99,21 @@ def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
         # Write to ccx
         f.write("*NSET, NSET=EDGENODES\n")
 
-        for i, nid in enumerate(edge_nodes):
-            if i % 16 == 0 and i != 0:
-                f.write("\n")  # optional formatting (ccx readable lines)
-            f.write(f"{nid}, ")
+        for i in range(0, len(edge_nodes), 16):
+            chunk = edge_nodes[i:i+16]
+            line = ", ".join(str(nid) for nid in chunk)
 
-        f.write("\n")
+            # If NOT the last chunk → add trailing comma
+            if i + 16 < len(edge_nodes):
+                f.write(line + ",\n")
+            else:
+                f.write(line + "\n")
 
         # -------------------------
         # Create Top Surface
         # -------------------------
-        f.write("*Surface, Name=TopSurface, Type=Element\n")
-        f.write("Eall, S2\n")
+        # f.write("*Surface, Name=TopSurface, Type=Element\n")
+        # f.write("Eall, S2\n")
 
         # -------------------------
         # Create Step
@@ -127,13 +130,13 @@ def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
         f.write("*Output, Frequency=1\n")
         
         # Boundary Conditions
-        f.write("*BOUNDARY, FIXED\n")
-        f.write("BCXY, 1, 1\n")
-        f.write("BCXY, 2, 2\n")
-        f.write("*BOUNDARY, FIXED\n")
-        f.write("BCY, 2, 2\n")
-        f.write("*BOUNDARY, FIXED\n")
-        f.write("EDGENODES, 3, 3\n")
+        f.write("*BOUNDARY\n")
+        f.write("BCXY, 1, 1, 0\n")
+        f.write("BCXY, 2, 2, 0\n")
+        f.write("*BOUNDARY\n")
+        f.write("BCY, 2, 2, 0\n")
+        f.write("*BOUNDARY\n")
+        f.write("EDGENODES, 3, 3, 0\n")
 
         # Apply Load
         f.write("*DLOAD\n")
