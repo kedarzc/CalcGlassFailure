@@ -55,7 +55,7 @@ def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
         # -------------------------
         # Elements (S4)
         # -------------------------
-        f.write("*ELEMENT, TYPE=S4R, ELSET=Eall\n")
+        f.write("*ELEMENT, TYPE=S4, ELSET=Eall\n")
 
         eid = 1
         for j in range(ny - 1):
@@ -128,24 +128,19 @@ def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
         # f.write("*STEP\n")
         # f.write("*STATIC\n")
         
-        f.write("*STEP, NLGEOM\n")
+        f.write("*STEP,NLGEOM=YES,INC=100,AMPLITUDE=STEP\n")
         f.write("*STATIC\n")
-        f.write("0.1, 1.0, 1e-8, 0.1\n")
-   
-        # Output Frequency
-        f.write("*Output, Frequency=1\n")
-        
+        f.write("0.01,1,0,0\n")
+                
         # Boundary Conditions
         f.write("*BOUNDARY\n")
-        f.write("BCXY, 1, 1, 0\n")
-        f.write("BCXY, 2, 2, 0\n")
-        f.write("*BOUNDARY\n")
-        f.write("BCY, 2, 2, 0\n")
-        f.write("*BOUNDARY\n")
-        f.write("EDGENODES, 3, 3, 0\n")
+        f.write("BCXY, 1,,0\n")
+        f.write("BCXY, 2,,0\n")
+        f.write("BCY, 2,,0\n")
+        f.write("EDGENODES, 3,,0\n")
 
         # Apply Load
-        f.write("*DLOAD\n")
+        f.write("*DSLOAD\n")
         f.write(f"Eall, P, -{pressure}\n")
 
         # Print outputs

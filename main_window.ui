@@ -381,7 +381,7 @@ font: 12pt &quot;Arial&quot;;</string>
       <double>98.989999999999995</double>
      </property>
      <property name="value">
-      <double>72.000000000000000</double>
+      <double>70.000000000000000</double>
      </property>
     </widget>
     <widget class="QLabel" name="YoungModulus">
