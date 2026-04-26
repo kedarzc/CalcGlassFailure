@@ -2,14 +2,20 @@ import subprocess
 import os
 from fea_data import Model
 
-def m_to_mm(number):
+def mm_to_m(number):
     return number/1000.0
+    
+def m_to_mm(number):
+    return number*1000.0
 
 def GPa_to_Pa(number):
     return(number*10**9)
 
 def kPa_to_Pa(number):
     return(number*10**3)
+    
+def Pa_to_MPa(number):
+    return(number/1e6)
 
 def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
     """
@@ -32,7 +38,7 @@ def write_abaqus_inp(grid,  model: Model, filename="mesh.inp"):
     # Extract values
     Lx = model.geometry.Lx
     Ly = model.geometry.Ly
-    t = m_to_mm(model.geometry.thickness)
+    t = mm_to_m(model.geometry.thickness)
     E = GPa_to_Pa(model.material.E)
     nu = model.material.nu
     pressure = kPa_to_Pa(model.load.pressure)

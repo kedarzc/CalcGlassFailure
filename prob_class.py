@@ -148,13 +148,16 @@ class App:
     # -------------------------
     def read_results(self):
 
-        disp, sigma1 = POSTUTILS.extract_max_results_from_dat("mesh.dat")
-
-        print("Max displacement:", disp)
-        print("Max principal stress:", sigma1)
-
-        self.window.u_max.setText("N/A")
-        self.window.sigma_1.setText("N/A")
+        max_disp, max_stress = POSTUTILS.extract_max_results_from_dat("mesh.dat")
+        
+        max_disp_mm = abs(FEAUTILS.m_to_mm(max_disp))
+        max_stress_MPa = FEAUTILS.Pa_to_MPa(max_stress)
+        
+        print("Max displacement:", max_disp_mm)
+        print("Max principal stress:", max_stress_MPa)
+        
+        self.window.u_max.setText(f"{max_disp_mm:.3f}")
+        self.window.sigma_1.setText(f"{max_stress_MPa:.3f}")
         
 
 # -------------------------

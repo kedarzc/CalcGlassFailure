@@ -1,7 +1,9 @@
 import math
 
 def extract_max_results_from_dat(filename):
+    # Max Z-displacement (by absolute value, signed stored)
     max_disp = 0.0
+
     max_principal_stress = -1e20
 
     in_disp_block = False
@@ -12,39 +14,39 @@ def extract_max_results_from_dat(filename):
             line = line.strip()
 
             # -------------------------
-            # Detect sections
+            # Detect sections (robust)
             # -------------------------
-            if "displacements (vx,vy,vz)" in line:
+            if "displacements" in line.lower():
                 in_disp_block = True
                 in_stress_block = False
                 continue
 
-            if "stresses (elem, integ.pnt." in line:
+            if "stresses" in line.lower():
                 in_disp_block = False
                 in_stress_block = True
                 continue
 
-            # Stop blocks when blank line appears
+            # IMPORTANT: Do NOT kill block on blank line
             if line == "":
-                in_disp_block = False
-                in_stress_block = False
                 continue
 
             # -------------------------
-            # Displacement parsing
+            # Displacement parsing (Z only)
             # -------------------------
             if in_disp_block:
                 parts = line.split()
+
+                # Expect: node ux uy uz
                 if len(parts) < 4:
                     continue
 
                 try:
-                    ux = float(parts[1])
-                    uy = float(parts[2])
                     uz = float(parts[3])
 
-                    mag = math.sqrt(ux**2 + uy**2 + uz**2)
-                    max_disp = max(max_disp, mag)
+                    # Track largest absolute Z displacement
+                    if abs(uz) > abs(max_disp):
+                        max_disp = uz  # keep sign
+
                 except:
                     continue
 
@@ -53,6 +55,8 @@ def extract_max_results_from_dat(filename):
             # -------------------------
             if in_stress_block:
                 parts = line.split()
+
+                # Expect: elem, ip, sxx, syy, szz, sxy, sxz, syz
                 if len(parts) < 8:
                     continue
 
@@ -64,10 +68,6 @@ def extract_max_results_from_dat(filename):
                     sxz = float(parts[6])
                     syz = float(parts[7])
 
-                    # Build stress tensor
-                    # [ sxx  sxy  sxz ]
-                    # [ sxy  syy  syz ]
-                    # [ sxz  syz  szz ]
                     import numpy as np
                     stress_tensor = np.array([
                         [sxx, sxy, sxz],
@@ -75,10 +75,9 @@ def extract_max_results_from_dat(filename):
                         [sxz, syz, szz]
                     ])
 
-                    # Principal stresses = eigenvalues
                     eigvals = np.linalg.eigvalsh(stress_tensor)
-
                     sigma_max = max(eigvals)
+
                     max_principal_stress = max(max_principal_stress, sigma_max)
 
                 except:
