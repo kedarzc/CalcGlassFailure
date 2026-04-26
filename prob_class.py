@@ -13,6 +13,7 @@ from PySide6.QtCore import QFile
 import fea_utils as FEAUTILS
 import fea_data as FEADATA
 import post_utils as POSTUTILS
+import glass_prob_failure_model as GPFM
 
 class App:
     def __init__(self):
@@ -147,17 +148,25 @@ class App:
     # Read results
     # -------------------------
     def read_results(self):
-
-        max_disp, max_stress = POSTUTILS.extract_max_results_from_dat("mesh.dat")
         
-        max_disp_mm = abs(FEAUTILS.m_to_mm(max_disp))
-        max_stress_MPa = FEAUTILS.Pa_to_MPa(max_stress)
+        umag, uz = POSTUTILS.compute_max_displacement("mesh.dat")
+        sigma_list  = POSTUTILS.compute_surface_principal_stresses("mesh.dat", "mesh.inp")
+        
+        max_disp_mm = FEAUTILS.m_to_mm(umag)
+        max_stress_MPa = FEAUTILS.Pa_to_MPa(max(sigma_list))
         
         print("Max displacement:", max_disp_mm)
         print("Max principal stress:", max_stress_MPa)
         
         self.window.u_max.setText(f"{max_disp_mm:.3f}")
         self.window.sigma_1.setText(f"{max_stress_MPa:.3f}")
+        
+        m = 7
+        k = 2.86e-53   # SI units
+
+        Pf, B = GPFM.compute_weibull_failure("mesh.dat", "mesh.inp", m, k)
+
+        print(f"Probability of failure: {Pf:.6e}")
         
 
 # -------------------------
